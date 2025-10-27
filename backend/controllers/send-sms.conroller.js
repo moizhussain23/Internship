@@ -36,18 +36,45 @@ exports.sendSms = async (req, res) => {
       day: 'numeric'
     });
 
-    // ✅ Send to Customer
+    console.log('Sending WhatsApp with variables:', {
+      customerName,
+      formattedDate,
+      appointmentTime,
+      servicesList,
+      total: total.toString(),
+      paymentMethod: paymentMethod === 'card' ? 'Paid' : 'Pay at appointment'
+    });
+
+    // ✅ Send to Customer using approved template
     const customerMessage = await client.messages.create({
       from: `whatsapp:${twilioPhoneNumber}`,
       to: `whatsapp:${formatToE164(customerPhone)}`,
-      body: `💇‍♀️ *Beauty At Home* \n\nHello ${customerName},\nYour appointment is *confirmed* ✅\n\n📅 Date: ${formattedDate}\n⏰ Time: ${appointmentTime}\n💅 Services: ${servicesList}\n💵 Total: ₹${total}\n💳 Payment: ${paymentMethod === 'card' ? 'Paid' : 'Pay at appointment'}\n\n📞 For changes, contact us: ${salonOwnerPhone}`
+      contentSid: 'HX237e7fbe20e0ece1ecb25cfc427a3447',
+      contentVariables: JSON.stringify({
+        "1": customerName,
+        "2": formattedDate,
+        "3": appointmentTime,
+        "4": servicesList,
+        "5": total.toString(),
+        "6": paymentMethod === 'card' ? 'Paid' : 'Pay at appointment',
+        "7": salonOwnerPhone
+      })
     });
 
-    // ✅ Send to Owner
+    // ✅ Send to Owner using approved template
     const ownerMessage = await client.messages.create({
       from: `whatsapp:${twilioPhoneNumber}`,
       to: `whatsapp:${formatToE164(salonOwnerPhone)}`,
-      body: `📢 *New Booking Alert*\n\nCustomer: ${customerName}\n📅 Date: ${formattedDate}\n⏰ Time: ${appointmentTime}\n💅 Services: ${servicesList}\n💵 Total: ₹${total}\n💳 Payment: ${paymentMethod === 'card' ? 'Paid' : 'Pay at appointment'}\n📞 Phone: ${customerPhone}`
+      contentSid: 'HXe2355acccb1c841e9da1b6b7e750394f',
+      contentVariables: JSON.stringify({
+        "1": customerName,
+        "2": formattedDate,
+        "3": appointmentTime,
+        "4": servicesList,
+        "5": total.toString(),
+        "6": paymentMethod === 'card' ? 'Paid' : 'Pay at appointment',
+        "7": customerPhone
+      })
     });
 
     res.status(200).json({ 

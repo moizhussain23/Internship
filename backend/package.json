@@ -1,15 +1,16 @@
 {
-  "name": "backend",
+  "name": "beauty-at-home-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Backend API for Beauty-At-Home salon booking application",
+  "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["beauty", "salon", "booking", "api", "nodejs", "express"],
+  "author": "Beauty-At-Home Team",
+  "license": "MIT",
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
